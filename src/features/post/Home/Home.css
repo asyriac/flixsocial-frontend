@@ -1,0 +1,44 @@
+.py-1 {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+.px-1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+.p-1 {
+  padding: 0.5em;
+}
+
+.title {
+  border-bottom: 1px solid lightgray;
+}
+
+.body-container {
+  border-left: 1px solid lightgray;
+  border-right: 1px solid lightgray;
+}
+
+.username,
+.date {
+  color: gray;
+}
+
+.content {
+  padding: 0 1em;
+}
+
+@media screen and (max-width: 767px) {
+  body {
+    font-size: 0.9rem;
+  }
+  .home {
+    margin-bottom: 2.5rem;
+  }
+
+  .home-body {
+    padding: 0.5em 0;
+  }
+}

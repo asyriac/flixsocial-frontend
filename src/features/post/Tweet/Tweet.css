@@ -1,0 +1,107 @@
+.tweet {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.retweet-container {
+  padding-left: 3rem;
+  font-size: 0.85rem;
+  color: var(--light-grey);
+}
+
+.tweet-container {
+  display: flex;
+  border-bottom: 1px solid lightgray;
+}
+
+.tweet-content-container {
+  flex: 1;
+}
+
+.tweet-header {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tweet-header a:hover {
+  text-decoration: underline;
+}
+
+.displayName {
+  font-weight: bold;
+}
+
+.tweet-footer {
+  display: flex;
+  align-items: center;
+  margin-top: 0.3rem;
+}
+
+.tweet-button-container {
+  flex: 1;
+  display: flex;
+}
+
+.tweet-button-container button {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.tweet-button {
+  fill: rgba(0, 0, 0, 0.35);
+}
+
+.tweet-button-container button:hover {
+  cursor: pointer;
+}
+
+.tweet-button-container button:hover .tweet-button {
+  fill: var(--primary);
+}
+
+.likedTweet {
+  fill: var(--danger);
+  color: var(--danger);
+}
+
+.retweetedTweet {
+  fill: var(--success);
+  color: var(--success);
+}
+
+@media screen and (max-width: 767px) {
+  .tweet-container {
+    padding: 0.5em 0;
+  }
+}
+
+.modal .newtweet-container {
+  border: none;
+}
+
+.modal-content {
+  width: 600px;
+  max-width: 100%;
+  height: 280px;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-body {
+  flex: 1;
+}
+
+.large-font {
+  font-size: 1.3rem;
+}
+
+.reply-seperator {
+  height: 0.5rem;
+  background: var(--dark-grey);
+  border-bottom: 1px solid lightgray;
+}
