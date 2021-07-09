@@ -12,7 +12,7 @@ const postNewTweet = async ({ content }) => {
 
 const fetchTweets = async () => {
   try {
-    const response = await axios.get(`${API_ENDPOINT}/posts`);
+    const response = await axios.get(`${API_ENDPOINT}/posts`, { params: { followingOnly: true } });
     return response;
   } catch (error) {
     return error.response;

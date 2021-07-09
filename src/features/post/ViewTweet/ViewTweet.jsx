@@ -19,7 +19,7 @@ const ViewTweet = () => {
       setIsLoading(false);
     }
     fetchData();
-  }, []);
+  }, [postId]);
 
   if (isLoading) {
     return <Loading />;

@@ -1,7 +1,7 @@
 import moment from "moment";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { likeTweet, replyToTweet, retweetTweet } from "../postSlice";
 import ReplyModal from "../ReplyModal/ReplyModal";
 import "./Tweet.css";
@@ -25,9 +25,9 @@ const TweetBody = ({ displayName, username, time, tweetMessage, largeFont }) => 
   return (
     <>
       <div className="tweet-header gap">
-        <a href="/" className="displayName">
+        <Link to={`/profile/${username}`} className="displayName" onClick={(e) => e.stopPropagation()}>
           <span>{displayName}</span>
-        </a>
+        </Link>
         <span className="username">@{username}</span>
         <span className="date">{time}</span>
       </div>
@@ -37,6 +37,7 @@ const TweetBody = ({ displayName, username, time, tweetMessage, largeFont }) => 
 };
 
 const TweetFooter = ({ handleAddComment, handleRetweetTweet, hasUserRetweetedTweet, retweetCount, handleLikeTweet, hasUserLikedTweet, likesCount }) => {
+  console.log(hasUserRetweetedTweet);
   return (
     <div className="tweet-footer">
       <div className="tweet-button-container">
@@ -162,7 +163,7 @@ const Tweet = ({ id, firstName, lastName, username, timestamp, tweetMessage, pro
           <TweetFooter
             handleAddComment={handleAddComment}
             handleRetweetTweet={handleRetweetTweet}
-            hasUserRetweetedTweet={handleRetweetTweet}
+            hasUserRetweetedTweet={hasUserRetweetedTweet}
             retweetCount={retweetCount}
             handleLikeTweet={handleLikeTweet}
             hasUserLikedTweet={hasUserLikedTweet}
