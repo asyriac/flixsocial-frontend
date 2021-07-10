@@ -16,23 +16,20 @@ const UserProfile = () => {
   const dispatch = useDispatch();
   const userPosts = posts.filter((post) => !post.hasOwnProperty("replyTo"));
   const replies = posts.filter((post) => post.hasOwnProperty("replyTo"));
-  const [isFollowing, setIsFollowing] = useState(user.followers.includes(user._id));
-  const [followersCount, setFollowersCount] = useState(user.followers.length);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followersCount, setFollowersCount] = useState(0);
   const isOwnAccount = userDetails?._id === user._id;
 
   console.log(isFollowing);
   useEffect(() => {
     const fetchProfile = async () => {
       let res;
-      if (username === undefined) {
-        res = await profileAPI.getUserProfile(user.username);
-        setUserDetails(res.data.user);
-        setProfileLoading(false);
-      } else {
-        res = await profileAPI.getUserProfile(username);
-        setUserDetails(res.data.user);
-        setProfileLoading(false);
-      }
+      let username_profile = username ? username : user.username;
+      res = await profileAPI.getUserProfile(username_profile);
+      setUserDetails(res.data.user);
+      setProfileLoading(false);
+      setIsFollowing(res.data.user?.followers?.includes(user._id));
+      setFollowersCount(res.data.user?.followers?.length);
       dispatch(fetchUserTweets(res.data.user._id));
     };
     fetchProfile();
@@ -42,7 +39,7 @@ const UserProfile = () => {
     setActiveTab(index);
   };
 
-  console.log(userDetails);
+  console.log(userDetails?.followers.length);
 
   const handleUnfollow = () => {
     dispatch(followUser(userDetails._id));
@@ -89,7 +86,7 @@ const UserProfile = () => {
           <h3 className="display-name">{`${userDetails.firstName} ${userDetails.lastName}`}</h3>
           <span className="display-name">{`@${userDetails.username}`}</span>
           <div className="follower-container gap">
-            <span>{user.following.length} following</span>
+            <span>{userDetails.following.length} following</span>
             <span>{followersCount} followers</span>
           </div>
         </div>

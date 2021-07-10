@@ -1,0 +1,22 @@
+.search-user-container .user {
+  display: flex;
+  padding: 1rem;
+  border-bottom: 1px solid var(--dark-grey);
+}
+
+.user .user-details-container {
+  flex: 1;
+  padding: 0 0.3rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+}
+
+.header .displayName {
+  margin-right: 0.5rem;
+}
