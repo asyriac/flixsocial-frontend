@@ -16,6 +16,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <PrivateRoute path="/" element={<HomePage />} />
         <PrivateRoute path="/home" element={<HomePage />} />
         <PrivateRoute path="/logout" element={<Logout />} />
         <PrivateRoute key="user-post" path="/post/:postId" element={<PostPage />} />
