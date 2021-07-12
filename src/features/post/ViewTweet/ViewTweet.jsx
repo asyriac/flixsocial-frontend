@@ -7,25 +7,22 @@ import Tweet from "../Tweet/Tweet";
 
 const ViewTweet = () => {
   const { postId } = useParams();
-  console.log(postId);
   const dispatch = useDispatch();
-  const { post } = useSelector((state) => state.post);
-  const [isLoading, setIsLoading] = useState(true);
+  const { post, loading } = useSelector((state) => state.post);
+  const [isMounted, setIsMounted] = useState(false);
   const { post: myPost, replyTo, replies } = post;
 
   useEffect(() => {
-    async function fetchData() {
-      await dispatch(fetchSingleTweet({ postId }));
-      setIsLoading(false);
+    function fetchData() {
+      dispatch(fetchSingleTweet({ postId }));
+      setIsMounted(true);
     }
     fetchData();
-  }, [postId]);
+  }, [postId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (isLoading) {
+  if (!isMounted || loading) {
     return <Loading />;
   }
-
-  console.log(replies);
 
   return (
     <div className="body-container ">
@@ -59,11 +56,13 @@ const ViewTweet = () => {
           retweetedUsers={myPost.retweetUsers}
           replyTo={myPost.replyTo}
           largeFont={true}
+          isUserPost={true}
         />
         <div className="reply-seperator"></div>
         {replies.map((reply) => {
           return (
             <Tweet
+              key={reply._id}
               id={reply._id}
               timestamp={reply.createdAt}
               username={reply.postedBy.username}

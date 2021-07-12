@@ -13,7 +13,6 @@ export const fetchCurrentUser = createAsyncThunk("auth/fetchCurrentUser", async 
 
 export const login = createAsyncThunk("auth/login", async ({ username, password }) => {
   const response = await authAPI.loginUser({ username, password });
-  console.log(response);
   if (response.status === 200) return { isLoggedIn: true, user: response.data.result };
   return { isLoggedIn: false, serverError: response.data.message };
 });

@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, Navigate } from "react-router-dom";
+import { useLocation, Navigate, Link } from "react-router-dom";
 import Loading from "../../../common/components/Loading/Loading";
 import useFetchCurrentUser from "../../../common/hooks/useFetchCurrentUser";
 import { register } from "../authSlice";
+import "./Register.css";
 
 const Register = () => {
   let { isLoggedIn, loading } = useSelector((state) => state.auth);
@@ -29,17 +30,19 @@ const Register = () => {
     <div className="flex flex-center login-container">
       <div className="login-form">
         <h3 className="text-center pb-1">Register</h3>
-        <div className="form-group">
-          <label className="" htmlFor="firstname">
-            First Name
-          </label>
-          <input className="form-control" type="text" id="firstname" value={firstName} onChange={(e) => setFirstName(e.target.value)} autoComplete="off" />
-        </div>
-        <div className="form-group">
-          <label className="" htmlFor="lastname">
-            Last Name
-          </label>
-          <input className="form-control" type="text" id="lastname" value={lastName} onChange={(e) => setLastName(e.target.value)} autoComplete="off" />
+        <div className="form-row">
+          <div className="form-group">
+            <label className="" htmlFor="firstname">
+              First Name
+            </label>
+            <input className="form-control" type="text" id="firstname" value={firstName} onChange={(e) => setFirstName(e.target.value)} autoComplete="off" />
+          </div>
+          <div className="form-group">
+            <label className="" htmlFor="lastname">
+              Last Name
+            </label>
+            <input className="form-control" type="text" id="lastname" value={lastName} onChange={(e) => setLastName(e.target.value)} autoComplete="off" />
+          </div>
         </div>
         <div className="form-group">
           <label className="" htmlFor="email">
@@ -53,15 +56,30 @@ const Register = () => {
           </label>
           <input className="form-control" type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="off" />
         </div>
-        <div className="form-group">
-          <label className="" htmlFor="password">
-            Password
-          </label>
-          <input className="form-control" type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="off" />
+        <div className="form-row">
+          <div className="form-group">
+            <label className="" htmlFor="password">
+              Password
+            </label>
+            <input className="form-control" type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="off" />
+          </div>
+          <div className="form-group">
+            <label className="" htmlFor="password">
+              Confirm Password
+            </label>
+            <input className="form-control" type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="off" />
+          </div>
         </div>
-        <div className="flex flex-center">
+
+        <span>
+          Have an account?{" "}
+          <Link to="/login" className="primary-text">
+            Login.
+          </Link>
+        </span>
+        <div className="flex flex-center mt-1">
           <button className="btn btn-secondary btn-sm" onClick={handleRegister}>
-            Login
+            Register
           </button>
         </div>
       </div>

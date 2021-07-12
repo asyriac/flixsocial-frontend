@@ -20,7 +20,6 @@ const UserProfile = () => {
   const [followersCount, setFollowersCount] = useState(0);
   const isOwnAccount = userDetails?._id === user._id;
 
-  console.log(isFollowing);
   useEffect(() => {
     const fetchProfile = async () => {
       let res;
@@ -33,13 +32,11 @@ const UserProfile = () => {
       dispatch(fetchUserTweets(res.data.user._id));
     };
     fetchProfile();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleActiveTab = (index) => {
     setActiveTab(index);
   };
-
-  console.log(userDetails?.followers.length);
 
   const handleUnfollow = () => {
     dispatch(followUser(userDetails._id));
@@ -54,7 +51,7 @@ const UserProfile = () => {
   };
 
   if (profileLoading) return <Loading />;
-  console.log(isOwnAccount);
+
   return (
     <div className="body-container ">
       <div>

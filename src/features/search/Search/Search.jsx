@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { debounce } from "lodash";
 import "./Search.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,29 +11,32 @@ const Search = () => {
   const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
   const { posts, users } = useSelector((state) => state.search);
+  const { user } = useSelector((state) => state.profile);
 
   const toggleActiveTab = (index) => {
     setActiveTab(index);
   };
 
-  const delayedHandleChange = useCallback(
-    debounce((value, tab) => {
-      if (tab === 1) {
-        dispatch(searchPosts(value));
-      }
-      if (tab === 2) dispatch(searchUsers(value));
-    }, 500),
-    []
+  const delayedHandleChange = useMemo(
+    () =>
+      debounce((value, tab) => {
+        if (tab === 1) {
+          dispatch(searchPosts(value));
+        }
+        if (tab === 2) dispatch(searchUsers(value));
+      }, 500),
+    [dispatch]
   );
 
-  const handleChange = (e) => {
-    setSearchInput(e.target.value);
-    delayedHandleChange(e.target.value, activeTab);
-  };
+  const handleChange = useCallback(
+    (e) => {
+      setSearchInput(e.target.value);
+      delayedHandleChange(e.target.value, activeTab);
+    },
+    [delayedHandleChange, activeTab]
+  );
 
-  useEffect(() => {
-    console.log("Fired");
-  }, [activeTab]);
+  useEffect(() => {}, [activeTab]);
 
   return (
     <div className="body-container ">
@@ -59,6 +62,7 @@ const Search = () => {
           <div className={`tab-content ${activeTab === 1 && "active-content"}`}>
             {posts.map(({ _id, postedBy, content, createdAt, likes, retweetData, retweetUsers, replyTo }) => (
               <Tweet
+                key={_id}
                 id={_id}
                 timestamp={createdAt}
                 username={postedBy.username}
@@ -66,7 +70,6 @@ const Search = () => {
                 lastName={postedBy.lastName}
                 tweetMessage={content}
                 profilePic={postedBy.profilePic}
-                key={_id}
                 likes={likes}
                 retweetData={retweetData}
                 retweetedUsers={retweetUsers}
@@ -76,8 +79,10 @@ const Search = () => {
           </div>
           <div className={`tab-content ${activeTab === 2 && "active-content"}`}>
             <div className="search-user-container">
-              {users.map(({ username, firstName, lastName, profilePic }) => {
-                return <UserSearch username={username} firstName={firstName} lastName={lastName} profilePic={profilePic} />;
+              {users.map(({ username, firstName, lastName, profilePic, _id, followers }) => {
+                return (
+                  <UserSearch key={_id} username={username} firstName={firstName} lastName={lastName} profilePic={profilePic} id={_id} followers={followers} currentUser={user} />
+                );
               })}
             </div>
           </div>

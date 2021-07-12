@@ -10,7 +10,7 @@ export const fetchUserTweets = createAsyncThunk("profile/fetchUserTweets", async
 });
 
 export const followUser = createAsyncThunk("profile/followUser", async (userId) => {
-  const response = await profileAPI.followUser(userId);
+  await profileAPI.followUser(userId);
 });
 
 export const profileSlice = createSlice({

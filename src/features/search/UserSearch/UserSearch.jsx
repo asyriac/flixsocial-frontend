@@ -1,7 +1,23 @@
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { followUser } from "../../profile/profileSlice";
 import "./UserSearch.css";
 
-const UserSearch = ({ username, firstName, lastName, profilePic }) => {
+const UserSearch = ({ username, firstName, lastName, profilePic, followers, id, currentUser }) => {
+  const [isFollowing, setIsFollowing] = useState(followers.includes(currentUser._id));
+  const dispatch = useDispatch();
+
+  const handleUnfollow = () => {
+    dispatch(followUser(id));
+    setIsFollowing((prevState) => !prevState);
+  };
+
+  const handleFollow = () => {
+    dispatch(followUser(id));
+    setIsFollowing((prevState) => !prevState);
+  };
+
   return (
     <div className="user">
       <div className="img-container">
@@ -12,7 +28,18 @@ const UserSearch = ({ username, firstName, lastName, profilePic }) => {
           <Link className="displayName" to={`/profile/${username}`}>{`${firstName} ${lastName}`}</Link>
           <span className="username">@{username}</span>
         </div>
-        <button className="btn btn-secondary btn-sm">Follow</button>
+        {isFollowing && (
+          <button className="btn btn-secondary btn-sm" onClick={handleUnfollow}>
+            {" "}
+            Following
+          </button>
+        )}
+        {!isFollowing && (
+          <button className="btn btn-secondary btn-sm" onClick={handleFollow}>
+            {" "}
+            Follow
+          </button>
+        )}
       </div>
     </div>
   );

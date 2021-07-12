@@ -11,7 +11,6 @@ const Home = () => {
   const { posts, loading } = useSelector((state) => state.post);
 
   useEffect(() => {
-    console.log("aaa");
     dispatch(fetchTweets());
   }, [dispatch]);
 

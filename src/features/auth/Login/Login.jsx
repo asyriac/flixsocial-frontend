@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./Login.css";
 import { login, resetServerError } from "../authSlice";
-import { useLocation, Navigate } from "react-router-dom";
+import { useLocation, Navigate, Link } from "react-router-dom";
 import Loading from "../../../common/components/Loading/Loading";
 import useFetchCurrentUser from "../../../common/hooks/useFetchCurrentUser";
 
@@ -66,7 +66,13 @@ const Login = () => {
             autoComplete="off"
           />
         </div>
-        <div className="flex flex-center">
+        <span>
+          Don't have an account?{" "}
+          <Link to="/register" className="primary-text">
+            Register.
+          </Link>
+        </span>
+        <div className="flex flex-center mt-1">
           <button className="btn btn-secondary btn-sm" onClick={handleLogin}>
             Login
           </button>

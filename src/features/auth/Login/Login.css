@@ -3,6 +3,10 @@
   width: 50%;
   margin: 0 auto; */
   height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 
 .login-form {
@@ -12,7 +16,9 @@
 
 @media screen and (max-width: 779px) {
   .login-container {
-    width: 100%;
     background: #fff;
+  }
+  .login-form {
+    padding: 5px 30px;
   }
 }

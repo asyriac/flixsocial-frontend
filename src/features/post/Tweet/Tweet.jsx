@@ -36,8 +36,7 @@ const TweetBody = ({ displayName, username, time, tweetMessage, largeFont }) => 
   );
 };
 
-const TweetFooter = ({ handleAddComment, handleRetweetTweet, hasUserRetweetedTweet, retweetCount, handleLikeTweet, hasUserLikedTweet, likesCount }) => {
-  console.log(hasUserRetweetedTweet);
+const TweetFooter = ({ handleAddComment, handleRetweetTweet, hasUserRetweetedTweet, retweetCount, handleLikeTweet, hasUserLikedTweet, likesCount, parent }) => {
   return (
     <div className="tweet-footer">
       <div className="tweet-button-container">
@@ -91,7 +90,7 @@ const UserImage = ({ profilePic }) => {
   );
 };
 
-const Tweet = ({ id, firstName, lastName, username, timestamp, tweetMessage, profilePic, likes, retweetData, retweetedUsers, replyTo, largeFont }) => {
+const Tweet = ({ id, firstName, lastName, username, timestamp, tweetMessage, profilePic, likes, retweetData, retweetedUsers, replyTo, largeFont, isUserPost }) => {
   const { user } = useSelector((state) => state.profile);
   const isRetweet = retweetData !== undefined;
   const retweetedBy = isRetweet ? username : null;
@@ -110,9 +109,9 @@ const Tweet = ({ id, firstName, lastName, username, timestamp, tweetMessage, pro
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [likesCount, setLikesCount] = useState(likes.length);
-  const [retweetCount, setRetweetCount] = useState(retweetedUsers?.length);
+  const [retweetCount] = useState(retweetedUsers?.length);
   const [hasUserLikedTweet, setHasUserLikedTweet] = useState(likes.includes(user._id));
-  const [hasUserRetweetedTweet, setHasUserRetweetedTweet] = useState(retweetedUsers?.includes(user._id));
+  const [hasUserRetweetedTweet] = useState(retweetedUsers?.includes(user._id));
   const [showModal, setShowModal] = useState(false);
   const [replyContent, setReplyContent] = useState("");
   const replyingTo = replyTo?.postedBy?.username || null;
@@ -144,14 +143,12 @@ const Tweet = ({ id, firstName, lastName, username, timestamp, tweetMessage, pro
     e.stopPropagation();
     setReplyContent("");
     setShowModal(false);
-    dispatch(replyToTweet({ id, replyContent }));
+    dispatch(replyToTweet({ id, replyContent, isUserPost }));
   };
 
   const handleViewTweet = () => {
     navigate(`/post/${id}`);
   };
-
-  console.log(replyTo);
   return (
     <div className="tweet" onClick={handleViewTweet}>
       <div className="retweet-container">{isRetweet && <span>Retweeted by {retweetedBy}</span>}</div>

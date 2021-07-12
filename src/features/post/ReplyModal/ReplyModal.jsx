@@ -1,9 +1,4 @@
-import { useDispatch } from "react-redux";
-import { replyToTweet } from "../postSlice";
-
 const Modal = ({ show, toggleModal, title, handleReplyToTweet, children }) => {
-  const dispatch = useDispatch();
-
   return (
     <div className={`modal ${show ? "show" : ""}`} onClick={(e) => e.stopPropagation()}>
       <div className="modal-content">
