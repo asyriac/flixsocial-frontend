@@ -1,15 +1,14 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./Login.css";
-import { login, resetServerError } from "../authSlice";
+import { login } from "../authSlice";
 import { useLocation, Navigate, Link } from "react-router-dom";
 import Loading from "../../../common/components/Loading/Loading";
 import useFetchCurrentUser from "../../../common/hooks/useFetchCurrentUser";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const Login = () => {
   let { isLoggedIn, loading, serverError } = useSelector((state) => state.auth);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const { state } = useLocation();
   const dispatch = useDispatch();
 
@@ -17,13 +16,26 @@ const Login = () => {
 
   const path = state?.from || "/home";
 
+  const initialValues = {
+    username: "",
+    password: "",
+  };
+
+  const validationSchema = Yup.object({
+    username: Yup.string().required("Required"),
+    password: Yup.string().required("Required"),
+  });
+
   const handleLogin = () => {
+    const { username, password } = formik.values;
     dispatch(login({ username, password }));
   };
 
-  const resetErrors = () => {
-    if (serverError !== null) dispatch(resetServerError());
-  };
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: handleLogin,
+  });
 
   if (loading) return <Loading />;
 
@@ -38,17 +50,8 @@ const Login = () => {
           <label className="" htmlFor="username">
             Username
           </label>
-          <input
-            className="form-control"
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => {
-              setUsername(e.target.value);
-              resetErrors();
-            }}
-            autoComplete="off"
-          />
+          <input className="form-control" type="text" id="username" value={formik.values.username} onChange={formik.handleChange} autoComplete="off" onBlur={formik.handleBlur} />
+          {formik.touched.username && formik.errors.username && <span className="invalid-feedback">{formik.errors.username}</span>}
         </div>
         <div className="form-group">
           <label className="" htmlFor="password">
@@ -58,13 +61,12 @@ const Login = () => {
             className="form-control"
             type="password"
             id="password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              resetErrors();
-            }}
+            value={formik.values.password}
+            onChange={formik.handleChange}
             autoComplete="off"
+            onBlur={formik.handleBlur}
           />
+          {formik.touched.password && formik.errors.password && <span className="invalid-feedback">{formik.errors.password}</span>}
         </div>
         <span>
           Don't have an account?{" "}
@@ -73,7 +75,7 @@ const Login = () => {
           </Link>
         </span>
         <div className="flex flex-center mt-1">
-          <button className="btn btn-secondary btn-sm" onClick={handleLogin}>
+          <button className="btn btn-secondary btn-sm" onClick={formik.handleSubmit} type="button" disabled={!formik.isValid}>
             Login
           </button>
         </div>

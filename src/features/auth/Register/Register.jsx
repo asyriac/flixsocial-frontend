@@ -1,26 +1,49 @@
-import { useState } from "react";
+import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, Navigate, Link } from "react-router-dom";
 import Loading from "../../../common/components/Loading/Loading";
 import useFetchCurrentUser from "../../../common/hooks/useFetchCurrentUser";
 import { register } from "../authSlice";
+import * as Yup from "yup";
 import "./Register.css";
 
 const Register = () => {
   let { isLoggedIn, loading } = useSelector((state) => state.auth);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const { state } = useLocation();
   const dispatch = useDispatch();
   useFetchCurrentUser();
   const path = state?.from || "/home";
 
+  const initialValues = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  };
+
+  const validationSchema = Yup.object({
+    firstName: Yup.string().required("Required"),
+    lastName: Yup.string().required("Required"),
+    email: Yup.string().email("Invalid email format").required("Required"),
+    username: Yup.string().required("Required"),
+    password: Yup.string().required("Required").min(8, "Password should be 8 chars minimum."),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password", ""), ""], "Passwords must match")
+      .required("Required"),
+  });
+
   const handleRegister = () => {
+    const { firstName, lastName, email, username, password } = formik.values;
     dispatch(register({ firstName, lastName, email, username, password }));
   };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: handleRegister,
+  });
 
   if (loading) return <Loading />;
 
@@ -32,42 +55,64 @@ const Register = () => {
         <h3 className="text-center pb-1">Register</h3>
         <div className="form-row">
           <div className="form-group">
-            <label className="" htmlFor="firstname">
+            <label className="" htmlFor="firstName">
               First Name
             </label>
-            <input className="form-control" type="text" id="firstname" value={firstName} onChange={(e) => setFirstName(e.target.value)} autoComplete="off" />
+            <input className="form-control" type="text" id="firstName" value={formik.values.firstName} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+            {formik.touched.firstName && formik.errors.firstName && <span className="invalid-feedback">{formik.errors.firstName}</span>}
           </div>
           <div className="form-group">
-            <label className="" htmlFor="lastname">
+            <label className="" htmlFor="lastName">
               Last Name
             </label>
-            <input className="form-control" type="text" id="lastname" value={lastName} onChange={(e) => setLastName(e.target.value)} autoComplete="off" />
+            <input className="form-control" type="text" id="lastName" value={formik.values.lastName} onChange={formik.handleChange} autoComplete="off" onBlur={formik.handleBlur} />
+            {formik.touched.lastName && formik.errors.lastName && <span className="invalid-feedback">{formik.errors.lastName}</span>}
           </div>
         </div>
         <div className="form-group">
           <label className="" htmlFor="email">
             Email
           </label>
-          <input className="form-control" type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="off" />
+          <input className="form-control" type="email" id="email" value={formik.values.email} onChange={formik.handleChange} autoComplete="off" onBlur={formik.handleBlur} />
+          {formik.touched.email && formik.errors.email && <span className="invalid-feedback">{formik.errors.email}</span>}
         </div>
         <div className="form-group">
           <label className="" htmlFor="username">
             Username
           </label>
-          <input className="form-control" type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="off" />
+          <input className="form-control" type="text" id="username" value={formik.values.username} onChange={formik.handleChange} autoComplete="off" onBlur={formik.handleBlur} />
+          {formik.touched.username && formik.errors.username && <span className="invalid-feedback">{formik.errors.username}</span>}
         </div>
         <div className="form-row">
           <div className="form-group">
             <label className="" htmlFor="password">
               Password
             </label>
-            <input className="form-control" type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="off" />
+            <input
+              className="form-control"
+              type="password"
+              id="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              autoComplete="off"
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.password && formik.errors.password && <span className="invalid-feedback">{formik.errors.password}</span>}
           </div>
           <div className="form-group">
-            <label className="" htmlFor="password">
+            <label className="" htmlFor="confirmPassword">
               Confirm Password
             </label>
-            <input className="form-control" type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="off" />
+            <input
+              className="form-control"
+              type="password"
+              id="confirmPassword"
+              value={formik.values.confirmPassword}
+              onChange={formik.handleChange}
+              autoComplete="off"
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.confirmPassword && formik.errors.confirmPassword && <span className="invalid-feedback">{formik.errors.confirmPassword}</span>}
           </div>
         </div>
 
@@ -78,7 +123,7 @@ const Register = () => {
           </Link>
         </span>
         <div className="flex flex-center mt-1">
-          <button className="btn btn-secondary btn-sm" onClick={handleRegister}>
+          <button className="btn btn-secondary btn-sm" onClick={formik.handleSubmit} type="submit" disabled={!formik.isValid}>
             Register
           </button>
         </div>
